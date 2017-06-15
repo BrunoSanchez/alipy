@@ -1,4 +1,4 @@
-from alipy import star
+#from alipy import star
 # star not used?
 import os
 import numpy as np
@@ -32,7 +32,7 @@ def affineremap(filepath, transform, shape, alifilepath=None,
 
     :param hdu: The hdu of the fits file that you want me to use. 0 is primary.
                 If multihdu, 1 is usually science.
-                
+
     :param overwrite: If True outdir is ignored and the original files will be overwrite.
     :type overwrite: boolean
     """
@@ -45,7 +45,7 @@ def affineremap(filepath, transform, shape, alifilepath=None,
         data, matrix, offset=offset, output_shape=shape)
 
     basename = os.path.splitext(os.path.basename(filepath))[0]
-    
+
     if overwrite:
         alifilepath = filepath
         if alifilepath is None:

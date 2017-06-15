@@ -11,7 +11,7 @@ __author__ = "Malte Tewes"
 __copyright__ = "2012, Malte Tewes"
 __version__ = "2.0"
 
-from alipy import imgcat, pysex, star, quad, ident, align
+# from . import imgcat, pysex, star, quad, ident, align
 
 __all__ = ["imgcat", "pysex", "star", "quad", "ident", "align"]
 

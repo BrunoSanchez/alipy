@@ -9,7 +9,6 @@ import math
 import numpy as np
 import operator  # For sorting
 import copy
-import itertools
 import scipy.linalg
 import scipy.spatial
 
@@ -89,7 +88,7 @@ class Star:
         self to the otherstar, in degrees
         """
         return math.atan2(otherstar.y - self.y, otherstar.x - self.x) * \
-               (180.0 / math.pi) % 360.0
+            (180.0 / math.pi) % 360.0
 
     def distanceandsort(self, otherstarlist):
         """
@@ -160,7 +159,7 @@ def area(starlist, border=0.01):
 def readmancat(mancatfilepath, verbose="True"):
     """
     Reads a "manual" star catalog --
-    by manual, I mean "not written by sextractor", so this is typically a 
+    by manual, I mean "not written by sextractor", so this is typically a
     *short* file.
 
     Comment lines start with #, blank lines are ignored.
@@ -546,7 +545,7 @@ def identify(uknstars, refstars,
     Inspired by the "formpairs" of alipy 1.0 ...
     """
 
-    if trans != None:
+    if trans is not None:
         ukn = listtoarray(trans.applystarlist(uknstars))
     else:
         ukn = listtoarray(uknstars)
@@ -584,7 +583,7 @@ def identify(uknstars, refstars,
         print("Filtered for companions, keeping %i/%i matches" %
               (len(matchuknstars), np.sum(minok)))
 
-    if getstars == True:
+    if getstars:
         return (matchuknstars, matchrefstars)
     else:
         return len(matchuknstars)

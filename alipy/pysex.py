@@ -34,20 +34,21 @@ def _check_files(conf_file, conf_args, verbose=True):
        not os.path.isfile(conf_args['FILTER_NAME']):
         if verbose:
             print('No filter file found, using default filter')
-        f = open('.pysex.conv', 'w')
-        print("""CONV NORM
+        with open('.pysex.conv', 'w') as f:
+            f.write("""CONV NORM
 # 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.
 1 2 1
 2 4 2
-1 2 1""", file=f)
-        f.close()
+1 2 1""")
+
         conf_args['FILTER_NAME'] = '.pysex.conv'
     if 'STARNNW_NAME' not in conf_args or \
        not os.path.isfile(conf_args['STARNNW_NAME']):
         if verbose:
             print('No NNW file found, using default NNW config')
-        f = open('.pysex.nnw', 'w')
-        print("""NNW
+
+        with open('.pysex.nnw', 'w') as f:
+            f.write("""NNW
 # Neural Network Weights for the SExtractor star/galaxy classifier (V1.3)
 # inputs:     9 for profile parameters + 1 for seeing.
 # outputs:      ``Stellarity index'' (0.0 to 1.0)
@@ -74,8 +75,8 @@ def _check_files(conf_file, conf_args, verbose=True):
 
 
  0.00000e+00
- 1.00000e+00""", file=f)
-        f.close()
+ 1.00000e+00""")
+
         conf_args['STARNNW_NAME'] = '.pysex.nnw'
 
     return conf_file, conf_args
@@ -87,13 +88,12 @@ def _setup(conf_file, params):
     except:
         pass  # already created in _check_files
 
-    f = open('.pysex.param', 'w')
-    print('\n'.join(params), file=f)
-    f.close()
+    with open('.pysex.param', 'w') as f:
+        f.write('\n'.join(params))
 
 
 def _setup_img(image, name):
-    if not type(image) == type(''):
+    if not isinstance(image, str):
         import pyfits
         pyfits.writeto(name, image)
 
@@ -164,7 +164,7 @@ def run(image='', imageref='', params=[], conf_file=None,
         catpath = os.path.join(imgdir, catfilename)
 
     # Checking if permanent catalog already exists :
-    if rerun == False and type(image) == type(''):
+    if not rerun and isinstance(image, str):
         if os.path.exists(catpath):
             cat = _read_cat(catpath)
             return cat
@@ -177,13 +177,13 @@ def run(image='', imageref='', params=[], conf_file=None,
     else:
         verbose = True
     _cleanup()
-    if not type(image) == type(''):
+    if not isinstance(image, str):
         import pyfits
         im_name = '.pysex.fits'
         pyfits.writeto(im_name, image.transpose())
     else:
         im_name = image
-    if not type(imageref) == type(''):
+    if not isinstance(imageref, str):
         import pyfits
         imref_name = '.pysex.ref.fits'
         pyfits.writeto(imref_name, imageref.transpose())
@@ -199,7 +199,7 @@ def run(image='', imageref='', params=[], conf_file=None,
         return
 
     # Keeping the cat at a permanent location :
-    if keepcat and type(image) == type(''):
+    if keepcat and isinstance(image, str):
         shutil.copy('.pysex.cat', catpath)
 
     # Returning the cat :

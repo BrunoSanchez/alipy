@@ -2,12 +2,7 @@
 Quads are asterisms of 4 stars, used to match the catalogs.
 """
 
-import sys
-import os
-import math
 import numpy as np
-import operator  # For sorting
-import copy
 import itertools
 import scipy.spatial
 
@@ -199,7 +194,7 @@ def removeduplicates(quadlist, verbose=True):
         print("Removing %i/%i duplicates" % (len(quadlist) - np.sum(ui),
                                              len(quadlist)))
 
-    return [quad for (quad, u) in zip(quadlist, ui) if u == True]
+    return [quad for (quad, u) in zip(quadlist, ui) if u]
 
 
 def proposecands(uknquadlist, refquadlist, n=5, verbose=True):
@@ -217,7 +212,7 @@ def proposecands(uknquadlist, refquadlist, n=5, verbose=True):
     if verbose:
         print(("Finding %i best candidates "
                "among %i x %i (ukn x ref)") % (n,
-                                               len(uknquadlist), 
+                                               len(uknquadlist),
                                                len(refquadlist)))
     uknhashs = np.array([q.hash for q in uknquadlist])
     refhashs = np.array([q.hash for q in refquadlist])

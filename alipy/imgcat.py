@@ -1,6 +1,6 @@
-from alipy import star
-from alipy import pysex
-from alipy import quad
+from . import star
+from . import pysex
+from . import quad
 import os
 import numpy as np
 
@@ -184,8 +184,8 @@ class ImgCat:
                          marker=",", ls="none", color="black")
 
         if len(self.quadlist) != 0:
-            for quad in self.quadlist:
-                polycorners = star.listtoarray(quad.stars)
+            for a_quad in self.quadlist:
+                polycorners = star.listtoarray(a_quad.stars)
                 polycorners = ccworder(polycorners)
                 plt.fill(polycorners[:, 0],
                          polycorners[:, 1],

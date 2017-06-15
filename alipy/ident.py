@@ -1,7 +1,6 @@
 from alipy import imgcat
 from alipy import quad
 from alipy import star
-import sys
 import os
 import numpy as np
 
@@ -23,7 +22,7 @@ class Identification:
                          unknown image...
     :ivar refmatchstars: ... that correspond to these Star objects of the
                          reference image.
-    :ivar medfluxratio: Median flux ratio between the 
+    :ivar medfluxratio: Median flux ratio between the
                         images: "ukn * medfluxratio = ref"
                         A high value corresponds to a shallow unknown image.
                         It gets computed by the method calcfluxratio, using
@@ -35,7 +34,7 @@ class Identification:
         """
         :param ref: The reference image
         :type ref: ImgCat object
-        :param ukn: The unknown image, whose transform will be adjusted to 
+        :param ukn: The unknown image, whose transform will be adjusted to
                     match the ref
         :type ukn: ImgCat object
         """
@@ -49,7 +48,7 @@ class Identification:
         self.refmatchstars = []
         self.cand = None
 
-        self.medfluxratio = None  # ukn * medfluxratio 
+        self.medfluxratio = None  # ukn * medfluxratio
                                   # --> ref (high value means shallow image)
         self.stdfluxratio = None
 
@@ -70,7 +69,7 @@ class Identification:
             return
 
         # First question : how many stars should match ?
-        if len(self.ukn.starlist) < 5:  # Then we should simply try to get 
+        if len(self.ukn.starlist) < 5:  # Then we should simply try to get
                                         # the smallest distance...
             minnident = 4
         else:
@@ -86,7 +85,7 @@ class Identification:
         if self.ukn.quadlevel == 0:
             self.ukn.makemorequads(verbose=verbose)
 
-        while self.ok == False:
+        while not self.ok:
             # Find the best candidates
             cands = quad.proposecands(
                 self.ukn.quadlist, self.ref.quadlist, n=4, verbose=verbose)
@@ -107,12 +106,12 @@ class Identification:
                         self.ok = True
                         break  # get out of the for
 
-            if self.ok == False:
+            if not self.ok:
                 # We add more quads...
                 addedmorerefquads = self.ref.makemorequads(verbose=verbose)
                 addedmoreuknquads = self.ukn.makemorequads(verbose=verbose)
 
-                if addedmorerefquads == False and addedmoreuknquads == False:
+                if not addedmorerefquads and not addedmoreuknquads:
                     break  # get out of the while, we failed.
 
         if self.ok:  # we refine the transform
@@ -129,7 +128,7 @@ class Identification:
                 print("Refitting transform (before/after) :")
                 print(self.trans)
             newtrans = star.fitstars(self.uknmatchstars, self.refmatchstars)
-            if newtrans != None:
+            if newtrans is not None:
                 self.trans = newtrans
                 if verbose:
                     print(self.trans)
@@ -151,7 +150,7 @@ class Identification:
         """
         Computes a very simple median flux ratio between the images.
 
-        The purpose is simply to get a crude guess, for images with e.g. 
+        The purpose is simply to get a crude guess, for images with e.g.
         different exposure times.
         Given that we have these corresponding star lists in hand, this is
         trivial to do once findtrans was run.
@@ -179,7 +178,7 @@ class Identification:
         """
         A plot of the transformed stars and the candidate quad
         """
-        if self.ok == False:
+        if not self.ok:
             return
         if verbose:
             print("Plotting match ...")
